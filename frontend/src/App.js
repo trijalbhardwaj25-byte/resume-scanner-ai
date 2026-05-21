@@ -187,11 +187,11 @@ export default function App() {
 
       try {
 
-        const res = await fetch(
+        const response = await fetch(
           'https://tr1jal-resume-scanner-backend.hf.space'
         );
 
-        setApiOnline(res.ok);
+        setApiOnline(response.ok);
 
       } catch (error) {
 
@@ -246,7 +246,7 @@ export default function App() {
 
     try {
 
-      const res = await fetch(
+      const response = await fetch(
         'https://tr1jal-resume-scanner-backend.hf.space/predict',
         {
 
@@ -263,9 +263,9 @@ export default function App() {
         }
       );
 
-      const data = await res.json();
+      const data = await response.json();
 
-      if (!res.ok) {
+      if (!response.ok) {
 
         setApiOnline(false);
 
