@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './App.css';
 
 const LOADING_MSGS = [
@@ -44,9 +44,33 @@ export default function App() {
   const [loadMsg, setLoadMsg]     = useState('');
   const [result, setResult]       = useState(null);
   const [error, setError]         = useState('');
-  const [apiOnline, setApiOnline] = useState(true);
+  const [apiOnline, setApiOnline] = useState(null); // null = checking
   const timerRef                  = useRef(null);
   const textareaRef               = useRef(null);
+
+  // ── Check if API is alive on page load ──
+  useEffect(() => {
+    const checkApi = async () => {
+      try {
+        const res = await fetch('https://tr1jal-resume-scanner-backend.hf.space/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ resume_text: 'ping' }),
+        });
+        // any response (even 422/400) means server is UP
+        setApiOnline(true);
+      } catch (e) {
+        // fetch throws TypeError only on network failure = truly offline
+        setApiOnline(false);
+      }
+    };
+
+    checkApi();
+
+    // re-check every 30 seconds
+    const interval = setInterval(checkApi, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const startLoader = () => {
     let i = 0;
@@ -107,6 +131,13 @@ export default function App() {
     textareaRef.current?.focus();
   };
 
+  // ── Status label and dot class ──
+  const statusLabel = apiOnline === null ? 'Checking…'
+    : apiOnline ? 'API Online' : 'API Offline';
+
+  const dotClass = apiOnline === null ? 'checking'
+    : apiOnline ? 'online' : 'offline';
+
   return (
     <div className="app">
 
@@ -124,8 +155,8 @@ export default function App() {
         </div>
 
         <div className="header-status">
-          <div className={`status-dot ${apiOnline ? 'online' : 'offline'}`} />
-          <span>{apiOnline ? 'API Online' : 'API Offline'}</span>
+          <div className={`status-dot ${dotClass}`} />
+          <span>{statusLabel}</span>
         </div>
       </header>
 
