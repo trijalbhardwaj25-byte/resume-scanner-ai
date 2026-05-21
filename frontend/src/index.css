@@ -1,13 +1,42 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:         #07090f;
+  --surface:    #0e1117;
+  --surface-hi: #13171f;
+  --border:     rgba(255,255,255,0.07);
+  --border-hi:  rgba(255,255,255,0.13);
+  --accent:     #5c6bff;
+  --accent-lo:  rgba(92,107,255,0.1);
+  --accent-mid: rgba(92,107,255,0.22);
+  --green:      #00e5a0;
+  --green-lo:   rgba(0,229,160,0.1);
+  --amber:      #ffb547;
+  --amber-lo:   rgba(255,181,71,0.1);
+  --red:        #ff5e5e;
+  --red-lo:     rgba(255,94,94,0.1);
+  --text-1:     #eef0f6;
+  --text-2:     #8b90a8;
+  --text-3:     #4b5068;
+  --mono:       'DM Mono', monospace;
+  --sans:       'Syne', sans-serif;
+  --r-sm:       6px;
+  --r-md:       10px;
+  --r-lg:       16px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+html, body, #root { height: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--text-1);
+  font-family: var(--mono);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 4px; }
