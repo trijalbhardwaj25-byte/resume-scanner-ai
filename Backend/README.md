@@ -55,6 +55,9 @@ resume-scanner/
 - Skill extraction
 - AI-based career recommendations
 - Deployment on Vercel and Render
+## Live Demo
 
+Frontend Deployment:
+https://resume-scanner-ai-five.vercel.app
 ## Author
 Trijal Bhardwaj
