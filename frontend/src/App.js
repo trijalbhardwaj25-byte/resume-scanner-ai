@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './App.css';
 
 const LOADING_MSGS = [
@@ -10,14 +10,17 @@ const LOADING_MSGS = [
 ];
 
 function ConfidenceBadge({ level, pct }) {
-  const cls = level?.toLowerCase() === 'high'
-    ? 'high'
-    : level?.toLowerCase() === 'medium'
-    ? 'medium'
-    : 'low';
+
+  const cls =
+    level?.toLowerCase() === 'high'
+      ? 'high'
+      : level?.toLowerCase() === 'medium'
+      ? 'medium'
+      : 'low';
 
   return (
     <div className="conf-row">
+
       <span className={`conf-badge ${cls}`}>
         <span className="conf-badge-dot" />
         {level}
@@ -28,6 +31,7 @@ function ConfidenceBadge({ level, pct }) {
           {pct}% confidence
         </span>
       )}
+
     </div>
   );
 }
@@ -44,6 +48,7 @@ function ScoreBar({ name, value, delay }) {
       </span>
 
       <div className="score-track">
+
         <div
           className="score-fill"
           style={{
@@ -51,6 +56,7 @@ function ScoreBar({ name, value, delay }) {
             animationDelay: `${delay}s`,
           }}
         />
+
       </div>
 
       <span className="score-val">
@@ -172,9 +178,42 @@ export default function App() {
   const [loadMsg, setLoadMsg] = useState('');
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
+  const [apiOnline, setApiOnline] = useState(false);
 
   const timerRef = useRef(null);
   const textareaRef = useRef(null);
+
+  useEffect(() => {
+
+    const checkBackend = async () => {
+
+      try {
+
+        const res = await fetch(
+          'https://tr1jal-resume-scanner-backend.hf.space'
+        );
+
+        if (res.ok) {
+
+          setApiOnline(true);
+
+        } else {
+
+          setApiOnline(false);
+
+        }
+
+      } catch (error) {
+
+        setApiOnline(false);
+
+      }
+
+    };
+
+    checkBackend();
+
+  }, []);
 
   const startLoader = () => {
 
@@ -217,19 +256,22 @@ export default function App() {
 
     try {
 
-      const res = await fetch('https://tr1jal-resume-scanner-backend.hf.space/predict', {
+      const res = await fetch(
+        'https://tr1jal-resume-scanner-backend.hf.space/predict',
+        {
 
-        method: 'POST',
+          method: 'POST',
 
-        headers: {
-          'Content-Type': 'application/json',
-        },
+          headers: {
+            'Content-Type': 'application/json',
+          },
 
-        body: JSON.stringify({
-          resume_text: text
-        }),
+          body: JSON.stringify({
+            resume_text: text
+          }),
 
-      });
+        }
+      );
 
       const data = await res.json();
 
@@ -321,9 +363,9 @@ export default function App() {
 
         <div className="header-status">
 
-          <div className="status-dot" />
+          <div className={`status-dot ${apiOnline ? 'online' : 'offline'}`} />
 
-          API Online
+          {apiOnline ? 'API Online' : 'API Offline'}
 
         </div>
 
@@ -410,19 +452,6 @@ export default function App() {
                 </>
               ) : (
                 <>
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polygon points="5 3 19 12 5 21 5 3"/>
-                  </svg>
-
                   Analyze Resume
                 </>
               )}
@@ -434,24 +463,8 @@ export default function App() {
                 className="btn-ghost"
                 onClick={clear}
                 disabled={loading}
-                title="Clear"
               >
-
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="3 6 5 6 21 6"/>
-                  <path d="M19 6l-1 14H6L5 6"/>
-                  <path d="M10 11v6M14 11v6M9 6V4h6v2"/>
-                </svg>
-
+                Clear
               </button>
             )}
 
@@ -479,24 +492,7 @@ export default function App() {
 
           {error && !loading && (
             <div className="error-block">
-
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="12" y1="8" x2="12" y2="12"/>
-                <line x1="12" y1="16" x2="12.01" y2="16"/>
-              </svg>
-
               {error}
-
             </div>
           )}
 
@@ -509,10 +505,15 @@ export default function App() {
       </main>
 
       <footer className="footer">
-        <span>ResumeAI — v1.0.0</span>
+
+        <span>
+          ResumeAI — v1.0.0
+        </span>
+
         <span>
           Results are AI-generated and may not be 100% accurate.
         </span>
+
       </footer>
 
     </div>
