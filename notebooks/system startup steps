@@ -1,0 +1,108 @@
+# Resume Scanner AI — Run Commands
+
+## Start Backend
+
+Open terminal inside:
+
+Backend/
+
+Run:
+
+```bash
+python -m uvicorn app:app --reload
+```
+
+Expected:
+
+```bash
+Application startup complete
+```
+
+Backend runs on:
+
+http://127.0.0.1:8000
+
+---
+
+## Start Frontend
+
+Open terminal inside:
+
+frontend/
+
+Run:
+
+```bash
+npm start
+```
+
+Frontend runs on:
+
+http://localhost:3000
+
+---
+
+## Important
+
+Backend must run FIRST.
+
+Then start frontend.
+
+---
+
+## Full Architecture
+
+React Frontend
+↓
+FastAPI Backend
+↓
+ML Model (model.pkl + vectorizer.pkl)
+
+---
+
+## Common Fixes
+
+### If backend says:
+
+```bash
+ModuleNotFoundError
+```
+
+Run:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+### If frontend says:
+
+```bash
+npm not found
+```
+
+Install:
+
+Node.js
+
+---
+
+### If prediction fails
+
+Check:
+
+* backend terminal running
+* model.pkl exists in Backend/
+* vectorizer.pkl exists in Backend/
+* CORS added in app.py
+
+---
+
+## Git Save Commands
+
+```bash
+git add .
+git commit -m "message"
+git push
+```
