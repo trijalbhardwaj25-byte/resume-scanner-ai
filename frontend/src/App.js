@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './App.css';
 
 const LOADING_MSGS = [
@@ -180,6 +180,30 @@ export default function App() {
 
   const timerRef = useRef(null);
   const textareaRef = useRef(null);
+
+  useEffect(() => {
+
+    const checkBackend = async () => {
+
+      try {
+
+        const res = await fetch(
+          'https://tr1jal-resume-scanner-backend.hf.space'
+        );
+
+        setApiOnline(res.ok);
+
+      } catch (error) {
+
+        setApiOnline(false);
+
+      }
+
+    };
+
+    checkBackend();
+
+  }, []);
 
   const startLoader = () => {
 
@@ -485,7 +509,7 @@ export default function App() {
         </span>
 
         <span>
-          
+          Results are AI-generated and may not be 100% accurate.
         </span>
 
       </footer>
